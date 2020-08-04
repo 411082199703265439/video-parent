@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.videos.mapper.SubjectMapper">
+
+    <resultMap id="subjectMap" type="com.qf.videos.pojo.Subject">
+        <id column="sid" property="id"/>
+        <result column="subject_name" property="subjectName"/>
+        <collection property="courseList" ofType="com.qf.videos.pojo.Course">
+            <id column="cid" property="id"/>
+            <result column="course_title" property="courseTitle"/>
+            <result column="course_desc" property="courseDesc"/>
+            <result column="subject_id" property="subjectId"/>
+            <collection property="videoList" ofType="com.qf.videos.pojo.Video">
+                <id column="vid" property="id"/>
+                <result column="title" property="title"/>
+                <result column="detail" property="detail"/>
+                <result column="time" property="time"/>
+                <result column="speaker_id" property="speakerId"/>
+                <result column="course_id" property="courseId"/>
+                <result column="video_url" property="videoUrl"/>
+                <result column="image_url" property="imageUrl"/>
+                <result column="play_num" property="playNum"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <select id="selectAll" resultMap="subjectMap">
+        select
+        `subject`.id as sid,
+        `subject`.subject_name
+        from `subject`
+    </select>
+
+    <select id="selectSubjectById" parameterType="String" resultMap="subjectMap">
+        SELECT
+        `subject`.id AS sid,
+        `subject`.subject_name,
+        course.id AS cid,
+        course.course_title,
+        course.course_desc,
+        video.id AS vid,
+        video.title,
+        video.detail,
+        video.time,
+        video.speaker_id,
+        video.video_url,
+        video.image_url,
+        video.play_num
+        FROM
+        `subject`
+        LEFT JOIN course ON `subject`.id = subject_id
+        LEFT JOIN video ON course.id = video.course_id
+        WHERE
+        `subject`.id = #{id}
+    </select>
+
+</mapper>

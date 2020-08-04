@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.videos.mapper.CourseMapper">
+    <resultMap id="courseMap" type="com.qf.videos.pojo.Course">
+        <id column="cid" property="id"/>
+        <result column="course_title" property="courseTitle"/>
+        <result column="course_desc" property="courseDesc"/>
+        <result column="subject_id" property="subjectId"/>
+        <collection property="videoList" ofType="com.qf.videos.pojo.Video">
+            <id column="vid" property="id"/>
+            <result column="title" property="title"/>
+            <result column="detail" property="detail"/>
+            <result column="time" property="time"/>
+            <result column="sid" property="speakerId"/>
+            <result column="cid" property="courseId"/>
+            <result column="video_url" property="videoUrl"/>
+            <result column="image_url" property="imageUrl"/>
+            <result column="play_num" property="playNum"/>
+            <association property="speaker" javaType="com.qf.videos.pojo.Speaker">
+                <id column="sid" property="id"/>
+                <result column="speaker_name" property="speakerName"/>
+                <result column="speaker_desc" property="speakerDesc"/>
+                <result column="speaker_job" property="speakerJob"/>
+                <result column="head_img_url" property="headImgUrl"/>
+            </association>
+        </collection>
+    </resultMap>
+
+    <select id="selectCourseById" resultMap="courseMap">
+        SELECT
+        course.id AS cid,
+        course.course_title,
+        course.course_desc,
+        course.subject_id,
+        video.id AS vid,
+        video.title,
+        video.detail,
+        video.time,
+        video.video_url,
+        video.image_url,
+        video.play_num,
+        speaker.id AS sid,
+        speaker.speaker_name,
+        speaker.speaker_desc,
+        speaker.speaker_job,
+        speaker.head_img_url
+        FROM
+        course
+        LEFT JOIN video ON video.course_id = course.id
+        LEFT JOIN speaker ON speaker.id = video.speaker_id
+        WHERE
+        course.id = #{id}
+    </select>
+    <select id="selectAll" resultMap="courseMap">
+        SELECT
+        course.id as cid,
+        course.course_title,
+        course.course_desc,
+        course.subject_id as sid
+        FROM
+        course
+    </select>
+</mapper>

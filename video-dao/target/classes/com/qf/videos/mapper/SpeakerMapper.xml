@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.videos.mapper.SpeakerMapper">
+    <resultMap id="speakerMap" type="com.qf.videos.pojo.Speaker">
+        <id column="sid" property="id"/>
+        <result column="speaker_name" property="speakerName"/>
+        <result column="speaker_desc" property="speakerDesc"/>
+        <result column="speaker_job" property="speakerJob"/>
+        <result column="head_img_url" property="headImgUrl"/>
+    </resultMap>
+    <select id="selectAll" resultMap="speakerMap">
+        SELECT
+        speaker.id AS sid,
+        speaker.speaker_name,
+        speaker.speaker_desc,
+        speaker.speaker_job,
+        speaker.head_img_url
+        FROM
+        speaker
+    </select>
+    <select id="selectSpeakerByQueryVo" resultMap="speakerMap">
+        SELECT
+        speaker.id AS sid,
+        speaker.speaker_name,
+        speaker.speaker_desc,
+        speaker.speaker_job,
+        speaker.head_img_url
+        FROM
+        speaker
+        limit #{start}, #{size}
+    </select>
+    <select id="selectCountByQueryVo" resultType="Integer">
+        SELECT
+        Count(speaker.id) AS count
+        FROM
+        speaker
+    </select>
+    <delete id="deleteById" parameterType="String">
+        delete from speaker where id = #{id}
+    </delete>
+    <select id="selectSpeakerById" parameterType="String" resultMap="speakerMap">
+        SELECT
+        speaker.id AS sid,
+        speaker.speaker_name,
+        speaker.speaker_desc,
+        speaker.speaker_job,
+        speaker.head_img_url
+        FROM
+        speaker
+        where
+        speaker.id = #{id}
+    </select>
+    <insert id="insertSpeaker" parameterType="com.qf.videos.pojo.Speaker">
+        INSERT INTO `speaker`(
+        `speaker_name`,
+        `speaker_desc`,
+        `speaker_job`,
+        `head_img_url`)
+        VALUES
+        (#{speakerName},
+        #{speakerDesc},
+        #{speakerJob},
+        #{headImgUrl});
+    </insert>
+    <update id="updateSpeaker" parameterType="com.qf.videos.pojo.Speaker">
+        UPDATE
+        `speaker`
+        SET
+        `speaker_name` = #{speakerName},
+        `speaker_desc` = #{speakerDesc},
+        `speaker_job` = #{speakerJob},
+        `head_img_url` = #{headImgUrl}
+        WHERE
+        `id` = #{id};
+    </update>
+</mapper>

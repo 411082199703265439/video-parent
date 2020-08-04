@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.videos.mapper.VideoMapper">
+    <resultMap id="videoMap" type="com.qf.videos.pojo.Video">
+        <id column="vid" property="id"/>
+        <result column="title" property="title"/>
+        <result column="detail" property="detail"/>
+        <result column="time" property="time"/>
+        <result column="course_id" property="courseId"/>
+        <result column="video_url" property="videoUrl"/>
+        <result column="image_url" property="imageUrl"/>
+        <result column="play_num" property="playNum"/>
+        <result column="sid" property="speakerId"/>
+        <association property="speaker" javaType="com.qf.videos.pojo.Speaker">
+            <id column="sid" property="id"/>
+            <result column="speaker_name" property="speakerName"/>
+            <result column="speaker_desc" property="speakerDesc"/>
+            <result column="speaker_job" property="speakerJob"/>
+            <result column="head_img_url" property="headImgUrl"/>
+        </association>
+    </resultMap>
+    <select id="selectVideoById" parameterType="String" resultMap="videoMap">
+        SELECT
+        video.id AS vid,
+        video.title,
+        video.detail,
+        video.time,
+        video.course_id,
+        video.video_url,
+        video.image_url,
+        video.play_num,
+        speaker.id AS sid,
+        speaker.speaker_name,
+        speaker.speaker_desc,
+        speaker.speaker_job,
+        speaker.head_img_url
+        FROM
+        video
+        LEFT JOIN speaker ON speaker.id = video.speaker_id
+        where
+        video.id = #{id}
+    </select>
+    <update id="updateVideo" parameterType="com.qf.videos.pojo.Video">
+        update video
+        set
+        <if test="title != null and title != ''">
+            title = #{title},
+        </if>
+        <if test="detail != null and detail != ''">
+            detail = #{detail},
+        </if>
+        <if test="time != null and time != ''">
+            time = #{time},
+        </if>
+        <if test="speakerId != null and speakerId != ''">
+            speaker_id = #{speakerId},
+        </if>
+        <if test="courseId != null and courseId != ''">
+            course_id = #{courseId},
+        </if>
+        <if test="videoUrl != null and videoUrl != ''">
+            video_url = #{videoUrl},
+        </if>
+        <if test="imageUrl != null and imageUrl != ''">
+            image_url = #{imageUrl},
+        </if>
+        <if test="playNum != null and playNum != ''">
+            play_num = #{playNum},
+        </if>
+        id=#{id}
+        where
+        id = #{id}
+    </update>
+    <select id="selectVideoByQueryVo" parameterType="com.qf.videos.pojo.QueryVo" resultMap="videoMap">
+        SELECT
+        video.id AS vid,
+        video.title,
+        video.detail,
+        video.time,
+        video.course_id,
+        video.video_url,
+        video.image_url,
+        video.play_num,
+        speaker.id AS sid,
+        speaker.speaker_name,
+        speaker.speaker_desc,
+        speaker.speaker_job,
+        speaker.head_img_url
+        FROM
+        video
+        LEFT JOIN speaker ON speaker.id = video.speaker_id
+        <where>
+            <if test="title != null and title != ''">
+                and video.title like '%${title}%'
+            </if>
+            <if test="speakerId != null and speakerId != ''">
+                and speaker.id = #{speakerId}
+            </if>
+            <if test="courseId != null and courseId != ''">
+                and video.course_id = #{courseId}
+            </if>
+        </where>
+        limit #{start}, #{size}
+    </select>
+    <select id="selectCountByQueryVo" parameterType="com.qf.videos.pojo.QueryVo" resultType="Integer">
+        SELECT
+        Count(video.id) AS count
+        FROM
+        video
+        LEFT JOIN speaker ON speaker.id = video.speaker_id
+        <where>
+            <if test="title != null and title != ''">
+                and video.title like '%${title}%'
+            </if>
+            <if test="speakerId != null and speakerId != ''">
+                and speaker.id = #{speakerId}
+            </if>
+            <if test="courseId != null and courseId != ''">
+                and video.course_id = #{courseId}
+            </if>
+        </where>
+    </select>
+    <delete id="deleteById" parameterType="String">
+        delete from video where id = #{id}
+    </delete>
+    <insert id="insertVideo" parameterType="com.qf.videos.pojo.Video">
+        INSERT INTO `video`(
+        `title`,
+        `detail`,
+        `time`,
+        `speaker_id`,
+        `course_id`,
+        `video_url`,
+        `image_url`,
+        `play_num`)
+        VALUES
+        (#{title},
+        #{detail},
+        #{time},
+        #{speakerId},
+        #{courseId},
+        #{videoUrl},
+        #{imageUrl},
+        #{playNum})
+    </insert>
+</mapper>

@@ -1,0 +1,6 @@
+com\qf\videos\mapper\VideoMapper.class
+com\qf\videos\mapper\SubjectMapper.class
+com\qf\videos\mapper\UserMapper.class
+com\qf\videos\mapper\CourseMapper.class
+com\qf\videos\mapper\AdminMapper.class
+com\qf\videos\mapper\SpeakerMapper.class
