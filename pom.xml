@@ -29,7 +29,7 @@
         <servlet.version>3.0-alpha-1</servlet.version>
         <jsp.version>2.2.1-b03</jsp.version>
         <jstl.version>1.2</jstl.version>
-        <jackson.version>2.9.9</jackson.version>
+        <jackson.version>2.9.10.8</jackson.version>
         <json.version>20190722</json.version>
     </properties>
 
